@@ -64,7 +64,7 @@ function App() {
           key={index}
           src={img.src}
           alt='background decoration'
-          className='fixed size-[150px] md:size-[300px] lg:size-[500px] object-contain z-0 opacity-70 pointer-events-none filter drop-shadow-lg animate-float'
+          className='fixed size-[150px] md:size-[300px] lg:size-[500px] object-contain z-[1] opacity-70 pointer-events-none filter drop-shadow-lg animate-float'
           style={{
             ...img.style,
           }}

@@ -11,14 +11,16 @@ const ShareButton = () => {
     }
 
     window.Kakao.Share.sendDefault({
-      ...kakaoShare(randomImage),
+      ...kakaoShare(
+        'https://italian-brainrot-genertaor.vercel.app' + randomImage
+      ),
     });
   };
 
   return (
     <button
       onClick={share}
-      className='absolute top-4 right-4 bg-white/80 hover:bg-white/90 p-2 rounded-full shadow-md hover:shadow-lg transition-all duration-300 z-10'
+      className='absolute top-4 right-4 bg-white/80 hover:bg-white/90 p-2 rounded-full shadow-md hover:shadow-lg transition-all duration-300 z-50'
       aria-label='공유하기'
     >
       <svg

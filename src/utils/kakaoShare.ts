@@ -1,30 +1,10 @@
-export const kakaoShare = (
-  imageUrl: string
-): {
-  objectType: 'feed';
-  content: {
-    title: string;
-    description: string;
-    imageUrl: string;
-    link: {
-      mobileWebUrl: string;
-      webUrl: string;
-    };
-  };
-  buttons: {
-    title: string;
-    link: {
-      mobileWebUrl: string;
-      webUrl: string;
-    };
-  }[];
-} => {
+export const kakaoShare = (imageUrl: string) => {
   return {
     objectType: 'feed',
     content: {
-      title: '🎪 이탈리안 브레인롯 캐릭터를 만들어보세요! 🎪',
-      description: '이탈리안 브레인롯 캐릭터로 변신해보세요!',
+      title: '🎪이탈리안 브레인롯 캐릭터를 만들어보세요!🎪',
       imageUrl: imageUrl,
+      description: '내 이름을 AI가 캐릭터로 변신시켜줍니다',
       link: {
         mobileWebUrl: window.location.href,
         webUrl: window.location.href,
