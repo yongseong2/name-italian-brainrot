@@ -1,4 +1,7 @@
 import axios from 'axios';
+import { getNameGenerationPrompt } from '../prompts/nameGenerationPrompt';
+import { getCharacterConceptPrompt } from '../prompts/characterConceptPrompt';
+import { getImageGenerationPrompt } from '../prompts/imageGenerationPrompt';
 
 export const convertToItalian = async (name: string) => {
   try {
@@ -9,21 +12,7 @@ export const convertToItalian = async (name: string) => {
         messages: [
           {
             role: 'user',
-            content: `다음 이름을 이탈리안 브레인롯 스타일의 이름으로 한글로 변환해주세요. 아래 예시들을 참고해서 재미있고 독특한 이름을 만들어주세요:
-
-예시:
-- Tralalero Tralala
-- Bombardiro Crocodilo
-- Boneca Ambalabu
-- Chimpanzini Bananini
-- Capuccino Assassino
-- Burbaloni Lulilolli
-- Chef Crabracadabra
-- Rhinodino Dildorino
-
-입력된 이름: ${name}
-
-응답은 변환된 이름만 한글로 출력해주세요.`,
+            content: getNameGenerationPrompt(name),
           },
         ],
       },
@@ -50,13 +39,7 @@ export const generateCharacterConcept = async (name: string) => {
         messages: [
           {
             role: 'user',
-            content: `다음 이탈리안 브레인롯 캐릭터의 특징과 성격을 2-3문장으로 재미있게 설명해주세요. 이름: ${name}
-
-예시 캐릭터들:
-- Tralalero Tralala: 노래하는 것을 좋아하는 마법사
-- Bombardiro Crocodilo: 폭탄을 던지는 것이 취미인 악어
-- Chimpanzini Bananini: 바나나로 마술을 부리는 침팬지
-- Capuccino Assassino: 커피를 독살자처럼 정확하게 내리는 바리스타`,
+            content: getCharacterConceptPrompt(name),
           },
         ],
       },
@@ -79,7 +62,10 @@ export const generateItalianBrainrotImage = async (
   characterDescription: string
 ) => {
   try {
-    const prompt = `Create a 1:1 image of a surreal character fusion: ${characterName}, ${characterDescription}. The base of the character's body should be an everyday object or vehicle, with character features growing out of it in unexpected ways. Use 3d realistic style with high detail, professional lighting, and clean composition. The character should look absurd but believable, like a high-quality 3D render.`;
+    const prompt = getImageGenerationPrompt(
+      characterName,
+      characterDescription
+    );
 
     const response = await axios.post(
       'https://api.openai.com/v1/images/generations',
