@@ -7,6 +7,7 @@ import {
   generateItalianBrainrotImage,
 } from './services/openaiService';
 import { ResultCard } from './components/ResultCard';
+import ShareButton from './components/ShareButton';
 
 function App() {
   const [name, setName] = useState('');
@@ -56,7 +57,8 @@ function App() {
   };
 
   return (
-    <div className='min-h-screen bg-gradient-to-br from-pink-100 via-purple-100 to-indigo-100 relative pt-4 overflow-y-auto'>
+    <div className='min-h-screen bg-gradient-to-br from-pink-100 via-purple-100 to-indigo-100 relative  overflow-y-auto'>
+      <ShareButton />
       {backgroundImages.map((img, index) => (
         <img
           key={index}
@@ -74,7 +76,7 @@ function App() {
           !italianName ? 'min-h-screen flex flex-col justify-center' : 'pt-4'
         }`}
       >
-        <div className='bg-white/80 backdrop-blur-lg rounded-3xl shadow-lg p-6 mb-6'>
+        <div className='bg-white/80 backdrop-blur-lg rounded-3xl shadow-lg p-6 mb-6 relative'>
           <h1 className='text-2xl md:text-3xl font-extrabold mb-4 font-comic bg-gradient-to-r from-[#FF0080] via-[#FF8C00] to-[#40E0D0] bg-clip-text text-transparent animate-bounce-slow text-center transform hover:scale-105 transition-transform duration-300 cursor-pointer select-none'>
             🎪 이탈리안 브레인롯 생성기 🎪
           </h1>
