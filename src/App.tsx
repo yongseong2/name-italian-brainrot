@@ -62,17 +62,20 @@ function App() {
           key={index}
           src={img.src}
           alt='background decoration'
-          className='fixed size-[150px] md:size-[500px] lg:size-[700px] object-contain z-0 opacity-70 pointer-events-none filter drop-shadow-lg animate-float'
+          className='fixed size-[150px] md:size-[300px] lg:size-[500px] object-contain z-0 opacity-70 pointer-events-none filter drop-shadow-lg animate-float'
           style={{
             ...img.style,
-            animationDelay: `${index * 0.5}s`,
           }}
         />
       ))}
 
-      <div className='w-full max-w-[600px] mx-auto px-1 relative z-10'>
+      <div
+        className={`w-full max-w-[600px] mx-auto px-1 relative z-10 transition-all duration-700 ease-in-out ${
+          !italianName ? 'min-h-screen flex flex-col justify-center' : 'pt-4'
+        }`}
+      >
         <div className='bg-white/80 backdrop-blur-lg rounded-3xl shadow-lg p-6 mb-6'>
-          <h1 className='text-3xl font-extrabold mb-4 font-comic bg-gradient-to-r from-[#FF0080] via-[#FF8C00] to-[#40E0D0] bg-clip-text text-transparent animate-gradient-x animate-bounce-slow text-center transform hover:scale-105 transition-transform duration-300 cursor-pointer select-none'>
+          <h1 className='text-2xl md:text-3xl font-extrabold mb-4 font-comic bg-gradient-to-r from-[#FF0080] via-[#FF8C00] to-[#40E0D0] bg-clip-text text-transparent animate-bounce-slow text-center transform hover:scale-105 transition-transform duration-300 cursor-pointer select-none'>
             🎪 이탈리안 브레인롯 생성기 🎪
           </h1>
 
@@ -80,9 +83,9 @@ function App() {
             <input
               type='text'
               value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder='✨ 당신의 이름을 이탈리안 브레인롯으로 변환해드립니다! ✨'
-              className='w-full px-5 py-3.5 text-base border-3 border-dashed rounded-2xl bg-white/90 transition-all duration-300 ease-in-out font-comic animate-rainbow-border'
+              onChange={(e) => setName(e.target.value.trim())}
+              placeholder='✨ 당신의 이름을 입력해주세요. ✨'
+              className='w-full px-4 md:px-5 py-3 md:py-3.5 text-sm md:text-base border-3 border-dashed rounded-2xl bg-white/90 transition-all duration-300 ease-in-out font-comic animate-rainbow-border'
               required
             />
 
