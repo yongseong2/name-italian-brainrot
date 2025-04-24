@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 커스텀 폰트 설정만 유지 */
+:root {
+  font-family: 'Noto Sans KR', sans-serif;
+}
