@@ -1,6 +1,6 @@
 import React from 'react';
 import { shareResult } from '../utils/resultShare';
-
+import { useEffect } from 'react';
 interface ResultButtonsProps {
   name: string;
   italianName: string;

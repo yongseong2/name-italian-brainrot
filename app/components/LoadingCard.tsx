@@ -12,7 +12,7 @@ const LoadingCard = ({ type }: LoadingCardProps) => {
       case 'character':
         return '🎭 캐릭터의 매력적인 설정을 구상하고 있어요...';
       case 'image':
-        return '🎨 상상 속 캐릭터를 그림으로 만들고 있어요...';
+        return '🎨 상상 속 캐릭터를 그림으로 만들고 있어요... 페이지를 벗어나면 다시 시작해야 해요.';
       default:
         return '로딩중...';
     }

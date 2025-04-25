@@ -13,6 +13,14 @@ import ShareButton from './components/ShareButton';
 import LoadingCard from './components/LoadingCard';
 import ResultButtons from './components/ResultButtons';
 
+interface StoredData {
+  name: string;
+  italianName: string;
+  character: string;
+  generatedImage: string;
+  additionalSetting: string;
+}
+
 function App() {
   const [name, setName] = useState('');
   const [italianName, setItalianName] = useState('');
@@ -39,7 +47,22 @@ function App() {
     }));
 
     setBackgroundImages(randomizedImages);
+
+    // 로컬 스토리지에서 저장된 데이터 불러오기
+    const storedData = localStorage.getItem('italianBrainrotData');
+    if (storedData) {
+      const parsedData: StoredData = JSON.parse(storedData);
+      setName(parsedData.name);
+      setItalianName(parsedData.italianName);
+      setCharacter(parsedData.character);
+      setGeneratedImage(parsedData.generatedImage);
+      setAdditionalSetting(parsedData.additionalSetting);
+    }
   }, []);
+
+  const saveToLocalStorage = (data: StoredData) => {
+    localStorage.setItem('italianBrainrotData', JSON.stringify(data));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -64,6 +87,16 @@ function App() {
         concept
       );
       setGeneratedImage(imageUrl);
+
+      // 결과 저장
+      const dataToStore: StoredData = {
+        name,
+        italianName: convertedName,
+        character: concept,
+        generatedImage: imageUrl,
+        additionalSetting,
+      };
+      saveToLocalStorage(dataToStore);
     } catch (error: any) {
       console.error('Error:', error);
       if (error?.response?.data?.error?.type === 'insufficient_quota') {
@@ -86,6 +119,7 @@ function App() {
     setLoading(false);
     setLoadingStage(null);
     setAdditionalSetting('');
+    localStorage.removeItem('italianBrainrotData');
   };
 
   return (
@@ -229,10 +263,10 @@ function App() {
             )}
           </div>
         </div>
+        <footer className='absolute top-2 md:top-4 left-2 md:left-4 text-[10px] md:text-sm text-gray-600 font-bold z-50'>
+          © Copyright 2025 Kim Seong Yong All rights reserved.
+        </footer>
       </main>
-      <footer className='absolute bottom-2 md:bottom-4 right-2 md:right-4 text-[10px] md:text-sm text-gray-600 font-bold z-50'>
-        © Copyright 2025 Kim Seong Yong All rights reserved.
-      </footer>
     </div>
   );
 }

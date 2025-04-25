@@ -26,7 +26,7 @@ export const shareResult = ({
     content: {
       title: '🎭 나의 이탈리안 브레인롯 캐릭터를 소개합니다! 🎭',
       imageUrl: imageUrl,
-      description: `${italianName}\n\n${character}`,
+      description: `${italianName}`,
       link: {
         mobileWebUrl: shareUrl,
         webUrl: shareUrl,

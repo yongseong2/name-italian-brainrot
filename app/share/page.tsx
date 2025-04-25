@@ -95,7 +95,7 @@ function SharePageContent() {
           </div>
         </div>
       </main>
-      <footer className='absolute bottom-2 md:bottom-4 right-2 md:right-4 text-[10px] md:text-sm text-gray-600 font-bold z-50'>
+      <footer className='absolute top-2 md:top-4 left-2 md:left-4 text-[10px] md:text-sm text-gray-600 font-bold z-50'>
         © Copyright 2025 Kim Seong Yong All rights reserved.
       </footer>
     </div>

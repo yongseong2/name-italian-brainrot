@@ -7,12 +7,11 @@ export const getImageGenerationPrompt = (
 Character Design Rules:
 1. Base: Start with an everyday object, food item, or vehicle as the main body
 2. Fusion Elements: Add unexpected character features growing from the base (e.g. animal parts, human limbs, exaggerated accessories)
-3. Italian Aesthetic: Include subtle Italian-inspired elements (e.g. pasta details, pizza patterns, Italian colors like red, white, and green)
-4. Surreal Touches:
+3. Surreal Touches:
    - Impossible but believable proportions
    - Whimsical or contrasting color combinations
    - Absurd but harmonized object-animal fusions (like a crocodile-headed airplane or a shark wearing sneakers)
-5. Expression: The character should have a friendly, comedic, or slightly mischievous expression
+4. Expression: The character should have a friendly, comedic, or slightly mischievous expression
 ${additionalSetting ? `6. Additional Setting: ${additionalSetting}` : ''}
 
 Technical Requirements:
