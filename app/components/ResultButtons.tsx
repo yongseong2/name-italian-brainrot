@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { shareResult } from '../utils/resultShare';
-import { useEffect } from 'react';
 
 interface ResultButtonsProps {
   name: string;
@@ -17,15 +16,86 @@ const ResultButtons = ({
   imageUrl,
   onReset,
 }: ResultButtonsProps) => {
+  const [kakaoImageUrl, setKakaoImageUrl] = useState<string | null>(null);
+
+  const kakaoUploadImage = async (imageUrl: string) => {
+    try {
+      // 이미지를 base64로 변환하는 함수
+      const getBase64FromUrl = async (url: string): Promise<string> => {
+        const img = document.createElement('img');
+        img.crossOrigin = 'anonymous';
+
+        return new Promise((resolve, reject) => {
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            canvas.width = img.width;
+            canvas.height = img.height;
+
+            const ctx = canvas.getContext('2d');
+            ctx?.drawImage(img, 0, 0);
+
+            const dataURL = canvas.toDataURL('image/png');
+            resolve(dataURL);
+          };
+
+          img.onerror = () => {
+            reject(new Error('Failed to load image'));
+          };
+
+          // CORS 우회를 위한 프록시 URL 사용
+          const proxyUrl =
+            '/api/proxy-image?url=' + encodeURIComponent(imageUrl);
+          img.src = proxyUrl;
+        });
+      };
+
+      // 이미지를 base64로 변환
+      const base64Data = await getBase64FromUrl(imageUrl);
+
+      // base64 데이터를 Blob으로 변환
+      const byteString = atob(base64Data.split(',')[1]);
+      const ab = new ArrayBuffer(byteString.length);
+      const ia = new Uint8Array(ab);
+      for (let i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
+      }
+      const blob = new Blob([ab], { type: 'image/png' });
+
+      // Blob을 File 객체로 변환
+      const file = new File([blob], 'character.png', { type: 'image/png' });
+
+      const kakao = window.Kakao;
+      if (kakao && !kakao.isInitialized()) {
+        kakao.init(process.env.NEXT_PUBLIC_KAKAO_KEY);
+      }
+
+      const result = await kakao.Share.uploadImage({
+        file: [file],
+      });
+
+      return result.infos.original.url;
+    } catch (error) {
+      console.error('Failed to upload image to Kakao:', error);
+      return null;
+    }
+  };
+
   const handleShare = async () => {
     try {
       if (window.Kakao && window.Kakao.Share) {
+        // 이미지를 Kakao 서버에 업로드
+        const uploadedImageUrl = await kakaoUploadImage(imageUrl);
+        if (!uploadedImageUrl) {
+          throw new Error('Failed to upload image to Kakao');
+        }
+
         const shareData = await shareResult({
           name,
-          imageUrl,
+          imageUrl: uploadedImageUrl,
           italianName,
           character,
         });
+
         window.Kakao.Share.sendDefault(shareData);
       } else {
         console.error('Kakao SDK is not loaded properly');
