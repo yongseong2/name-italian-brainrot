@@ -19,7 +19,7 @@ const LoadingCard = ({ type }: LoadingCardProps) => {
   };
 
   return (
-    <div className='bg-white/80 backdrop-blur-lg rounded-3xl shadow-lg p-8 mb-6 mt-8'>
+    <div className='bg-white/80 backdrop-blur-lg rounded-3xl shadow-lg p-8 mb-6 mt-6'>
       <div className='flex items-center justify-center'>
         <div className='text-center'>
           <div className='flex items-center justify-center mb-4'>

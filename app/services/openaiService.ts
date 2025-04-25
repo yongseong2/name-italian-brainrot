@@ -30,7 +30,10 @@ export const convertToItalian = async (name: string) => {
   }
 };
 
-export const generateCharacterConcept = async (name: string) => {
+export const generateCharacterConcept = async (
+  name: string,
+  additionalSetting: string
+) => {
   try {
     const response = await axios.post(
       'https://api.openai.com/v1/chat/completions',
@@ -39,7 +42,7 @@ export const generateCharacterConcept = async (name: string) => {
         messages: [
           {
             role: 'user',
-            content: getCharacterConceptPrompt(name),
+            content: getCharacterConceptPrompt(name, additionalSetting),
           },
         ],
       },

@@ -22,6 +22,7 @@ function App() {
     'name' | 'character' | 'image' | null
   >(null);
   const [error, setError] = useState('');
+  const [additionalSetting, setAdditionalSetting] = useState('');
   const [backgroundImages, setBackgroundImages] = useState<BackgroundImage[]>(
     []
   );
@@ -51,7 +52,10 @@ function App() {
       setItalianName(convertedName);
 
       setLoadingStage('character');
-      const concept = await generateCharacterConcept(convertedName);
+      const concept = await generateCharacterConcept(
+        convertedName,
+        additionalSetting
+      );
       setCharacter(concept);
 
       setLoadingStage('image');
@@ -81,6 +85,7 @@ function App() {
     setError('');
     setLoading(false);
     setLoadingStage(null);
+    setAdditionalSetting('');
   };
 
   return (
@@ -113,15 +118,35 @@ function App() {
               🎪 이탈리안 브레인롯 생성기 🎪
             </h1>
 
-            <form onSubmit={handleSubmit} className='flex flex-col gap-6'>
+            <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
               <input
                 type='text'
                 value={name}
-                onChange={(e) => setName(e.target.value.trim())}
-                placeholder='✨ 당신의 이름을 입력해주세요. ✨'
+                onChange={(e) => {
+                  const value = e.target.value.replace(/\s/g, '').slice(0, 20);
+                  setName(value);
+                }}
+                placeholder='✨ 당신의 이름을 입력해주세요. (최대 20글자) ✨'
                 className='w-full px-4 md:px-5 py-3 md:py-3.5 text-sm md:text-base border-3 border-dashed rounded-2xl bg-white/90 transition-all duration-300 ease-in-out animate-rainbow-border'
                 required
+                maxLength={20}
               />
+
+              <div className='relative'>
+                <textarea
+                  value={additionalSetting}
+                  onChange={(e) => {
+                    const value = e.target.value.slice(0, 100);
+                    setAdditionalSetting(value);
+                  }}
+                  placeholder='✨ (선택사항) 원하는 캐릭터 설정을 추가로 입력해주세요. 예시) 트랄라레로 트랄랄라, 봄바르디로 코르코딜로 느낌낌 등'
+                  className='w-full px-4 md:px-5 py-3 md:py-3.5 text-sm md:text-base border-3 border-dashed rounded-2xl bg-white/90 transition-all duration-300 ease-in-out min-h-[100px] resize-none'
+                  maxLength={100}
+                />
+                <span className='absolute bottom-2 right-3 text-xs text-gray-500'>
+                  {additionalSetting.length}/100
+                </span>
+              </div>
 
               <button
                 type='submit'
