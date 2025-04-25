@@ -2,6 +2,7 @@ import React from 'react';
 import { shareResult } from '../utils/resultShare';
 
 interface ResultButtonsProps {
+  name: string;
   italianName: string;
   character: string;
   imageUrl: string;
@@ -9,6 +10,7 @@ interface ResultButtonsProps {
 }
 
 const ResultButtons = ({
+  name,
   italianName,
   character,
   imageUrl,
@@ -18,6 +20,7 @@ const ResultButtons = ({
     if (window.Kakao && window.Kakao.Share) {
       window.Kakao.Share.sendDefault({
         ...shareResult({
+          name,
           imageUrl,
           italianName,
           character,

@@ -1,14 +1,26 @@
+import { encodeShareData } from './urlParams';
+
 interface ShareResultContent {
   imageUrl: string;
   italianName: string;
   character: string;
+  name: string;
 }
 
 export const shareResult = ({
   imageUrl,
   italianName,
   character,
+  name,
 }: ShareResultContent) => {
+  const baseUrl = window.location.origin;
+  const shareUrl = `${baseUrl}/share?${encodeShareData({
+    name,
+    italianName,
+    character,
+    imageUrl,
+  })}`;
+
   return {
     objectType: 'feed',
     content: {
@@ -16,16 +28,23 @@ export const shareResult = ({
       imageUrl: imageUrl,
       description: `${italianName}\n\n${character}`,
       link: {
-        mobileWebUrl: window.location.href,
-        webUrl: window.location.href,
+        mobileWebUrl: shareUrl,
+        webUrl: shareUrl,
       },
     },
     buttons: [
       {
+        title: '캐릭터 자세히 보기',
+        link: {
+          mobileWebUrl: shareUrl,
+          webUrl: shareUrl,
+        },
+      },
+      {
         title: '나도 캐릭터 만들기',
         link: {
-          mobileWebUrl: window.location.href,
-          webUrl: window.location.href,
+          mobileWebUrl: baseUrl,
+          webUrl: baseUrl,
         },
       },
     ],

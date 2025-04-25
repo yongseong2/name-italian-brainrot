@@ -187,6 +187,7 @@ function App() {
                 isImage
               />
               <ResultButtons
+                name={name}
                 italianName={italianName}
                 character={character}
                 imageUrl={generatedImage}
