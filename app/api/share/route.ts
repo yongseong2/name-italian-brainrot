@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { nanoid } from 'nanoid';
-import { ShareData } from '@/app/utils/types';
+import { ShareData } from '@/app/services/types';
 import { redis } from '@/app/lib/redis';
 
 export async function POST(request: Request) {
@@ -38,7 +38,7 @@ export async function POST(request: Request) {
 
     // Redis에 데이터 저장
     try {
-      await redis.set(id, data, {
+      await redis.set(id, JSON.stringify(data), {
         ex: 24 * 60 * 60,
       });
     } catch (storeError) {

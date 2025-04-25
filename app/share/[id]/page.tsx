@@ -1,10 +1,12 @@
-import { redis } from '@/app/lib/redis';
-import { ShareData } from '@/app/utils/types';
-import { notFound } from 'next/navigation';
+'use client';
+
+import { ShareData } from '@/app/services/types';
 import { BACKGROUND_IMAGES } from '@/app/constants/images';
 import { BackgroundImage } from '@/app/types/types';
 import Link from 'next/link';
-
+import { useEffect, useState } from 'react';
+import { getShareData } from '@/app/services/shareService';
+import Loading from '../loading';
 interface SharePageProps {
   params: {
     id: string;
@@ -12,20 +14,27 @@ interface SharePageProps {
 }
 
 export default async function SharePage({ params }: SharePageProps) {
-  let data: ShareData | null = null;
+  const [data, setData] = useState<ShareData | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-  try {
-    await redis.ping();
-    const rawData = await redis.get<ShareData>(params.id);
-
-    if (rawData) {
-      data = rawData;
+  const fetchData = async () => {
+    try {
+      const data = await getShareData(params.id);
+      setData(data);
+    } catch (error) {
+      setError('데이터를 불러오는 중 오류가 발생했습니다.');
     }
-  } catch (error) {
-    return notFound();
-  }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   if (!data) {
+    return <Loading />;
+  }
+
+  if (error) {
     return (
       <div className='relative min-h-screen'>
         <main className='bg-gradient-to-br from-pink-100 via-purple-100 to-indigo-100 flex items-center justify-center min-h-screen'>
@@ -82,9 +91,15 @@ export default async function SharePage({ params }: SharePageProps) {
           </div>
 
           <div className='space-y-6'>
-            <div className='bg-white/80 backdrop-blur-lg rounded-3xl shadow-lg p-6'>
-              <h2 className='text-lg font-bold mb-2'>✨ 캐릭터 이름</h2>
-              <p className='text-gray-700'>{data.italianName}</p>
+            <div className='bg-white/80 backdrop-blur-lg rounded-3xl shadow-lg p-6 flex flex-col gap-4'>
+              <div>
+                <h2 className='text-lg font-bold mb-2'>✨ 원본 이름</h2>
+                <p className='text-gray-700'>{data.name}</p>
+              </div>
+              <div>
+                <h2 className='text-lg font-bold mb-2'>✨ 캐릭터 이름</h2>
+                <p className='text-gray-700'>{data.italianName}</p>
+              </div>
             </div>
 
             <div className='bg-white/80 backdrop-blur-lg rounded-3xl shadow-lg p-6'>

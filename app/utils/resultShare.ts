@@ -1,4 +1,4 @@
-import { storeShareData } from './shareApi';
+import { storeShareData } from '../services/shareService';
 
 interface ShareResultContent {
   imageUrl: string;

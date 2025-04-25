@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server';
-import { ShareData } from '@/app/utils/types';
 import { redis } from '@/app/lib/redis';
 
 export async function GET(
@@ -17,19 +16,18 @@ export async function GET(
       );
     }
 
-    const data = await redis.get<string>(params.id);
+    const data = await redis.get(params.id);
 
     if (!data) {
-      console.log('No data found for ID:', params.id);
       return NextResponse.json(
         { error: '공유된 데이터를 찾을 수 없습니다.' },
         { status: 404 }
       );
     }
 
-    return NextResponse.json(JSON.parse(data) as ShareData);
+    // 데이터가 이미 객체 형태로 반환되므로 바로 사용
+    return NextResponse.json(data);
   } catch (error: any) {
-    console.error('Failed to get share data:', error);
     console.error('Error details:', {
       message: error.message,
       stack: error.stack,
