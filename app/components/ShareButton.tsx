@@ -1,20 +1,38 @@
+'use client';
+
+import { useEffect } from 'react';
 import { BACKGROUND_IMAGES } from '../constants/images';
 import { kakaoShare } from '../utils/kakaoShare';
 
 const ShareButton = () => {
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = 'https://developers.kakao.com/sdk/js/kakao.js';
+    script.async = true;
+    script.onload = () => {
+      if (!window.Kakao.isInitialized()) {
+        window.Kakao.init(process.env.NEXT_PUBLIC_KAKAO_KEY);
+      }
+    };
+    document.body.appendChild(script);
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
+
   const share = () => {
     const randomImage =
       BACKGROUND_IMAGES[Math.floor(Math.random() * BACKGROUND_IMAGES.length)];
 
-    if (window.Kakao && !window.Kakao.isInitialized()) {
-      window.Kakao.init(import.meta.env.VITE_KAKAO_KEY);
+    if (window.Kakao && window.Kakao.Share) {
+      window.Kakao.Share.sendDefault({
+        ...kakaoShare(
+          'https://italian-brainrot-genertaor.vercel.app' + randomImage
+        ),
+      });
+    } else {
+      console.error('Kakao SDK is not loaded properly');
     }
-
-    window.Kakao.Share.sendDefault({
-      ...kakaoShare(
-        'https://italian-brainrot-genertaor.vercel.app' + randomImage
-      ),
-    });
   };
 
   return (

@@ -18,7 +18,7 @@ export const convertToItalian = async (name: string) => {
       },
       {
         headers: {
-          Authorization: `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`,
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_OPENAI_API_KEY}`,
           'Content-Type': 'application/json',
         },
       }
@@ -26,7 +26,7 @@ export const convertToItalian = async (name: string) => {
     return response.data.choices[0].message.content.trim();
   } catch (error) {
     console.error('Error:', error);
-    throw new Error('이름 변환 중 오류가 발생했습니다.');
+    throw error;
   }
 };
 
@@ -45,7 +45,7 @@ export const generateCharacterConcept = async (name: string) => {
       },
       {
         headers: {
-          Authorization: `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`,
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_OPENAI_API_KEY}`,
           'Content-Type': 'application/json',
         },
       }
@@ -53,7 +53,7 @@ export const generateCharacterConcept = async (name: string) => {
     return response.data.choices[0].message.content;
   } catch (error) {
     console.error('Error:', error);
-    throw new Error('캐릭터 컨셉 생성 중 오류가 발생했습니다.');
+    throw error;
   }
 };
 
@@ -79,7 +79,7 @@ export const generateItalianBrainrotImage = async (
       },
       {
         headers: {
-          Authorization: `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`,
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_OPENAI_API_KEY}`,
           'Content-Type': 'application/json',
         },
       }
@@ -87,6 +87,6 @@ export const generateItalianBrainrotImage = async (
     return response.data.data[0].url;
   } catch (error) {
     console.error('Error:', error);
-    throw new Error('이미지 생성 중 오류가 발생했습니다.');
+    throw error;
   }
 };
