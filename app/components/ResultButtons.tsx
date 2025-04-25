@@ -1,6 +1,7 @@
 import React from 'react';
 import { shareResult } from '../utils/resultShare';
 import { useEffect } from 'react';
+
 interface ResultButtonsProps {
   name: string;
   italianName: string;
@@ -16,18 +17,22 @@ const ResultButtons = ({
   imageUrl,
   onReset,
 }: ResultButtonsProps) => {
-  const handleShare = () => {
-    if (window.Kakao && window.Kakao.Share) {
-      window.Kakao.Share.sendDefault({
-        ...shareResult({
+  const handleShare = async () => {
+    try {
+      if (window.Kakao && window.Kakao.Share) {
+        const shareData = await shareResult({
           name,
           imageUrl,
           italianName,
           character,
-        }),
-      });
-    } else {
-      console.error('Kakao SDK is not loaded properly');
+        });
+        window.Kakao.Share.sendDefault(shareData);
+      } else {
+        console.error('Kakao SDK is not loaded properly');
+      }
+    } catch (error) {
+      console.error('Failed to share:', error);
+      alert('공유하기에 실패했습니다. 잠시 후 다시 시도해주세요.');
     }
   };
 

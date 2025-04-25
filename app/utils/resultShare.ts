@@ -1,4 +1,4 @@
-import { encodeShareData } from './urlParams';
+import { storeShareData } from './shareApi';
 
 interface ShareResultContent {
   imageUrl: string;
@@ -7,19 +7,22 @@ interface ShareResultContent {
   name: string;
 }
 
-export const shareResult = ({
+export const shareResult = async ({
   imageUrl,
   italianName,
   character,
   name,
 }: ShareResultContent) => {
   const baseUrl = window.location.origin;
-  const shareUrl = `${baseUrl}/share?${encodeShareData({
-    name,
+
+  const shareId = await storeShareData({
+    imageUrl,
     italianName,
     character,
-    imageUrl,
-  })}`;
+    name,
+  });
+
+  const shareUrl = `${baseUrl}/share/${shareId}`;
 
   return {
     objectType: 'feed',
