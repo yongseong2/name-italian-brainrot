@@ -12,6 +12,8 @@ Character Design Rules:
    - Whimsical or contrasting color combinations
    - Absurd but harmonized object-animal fusions (like a crocodile-headed airplane or a shark wearing sneakers)
 4. Expression: The character should have a friendly, comedic, or slightly mischievous expression
+5. Use appropriate backgrounds for character images without adding descriptive text
+
 ${additionalSetting ? `6. Additional Setting: ${additionalSetting}` : ''}
 
 Technical Requirements:
