@@ -10,12 +10,17 @@ import {
 } from './services/openaiService';
 import { ResultCard } from './components/ResultCard';
 import ShareButton from './components/ShareButton';
+import LoadingCard from './components/LoadingCard';
+import ResultButtons from './components/ResultButtons';
 
 function App() {
   const [name, setName] = useState('');
   const [italianName, setItalianName] = useState('');
   const [character, setCharacter] = useState('');
   const [loading, setLoading] = useState(false);
+  const [loadingStage, setLoadingStage] = useState<
+    'name' | 'character' | 'image' | null
+  >(null);
   const [error, setError] = useState('');
   const [backgroundImages, setBackgroundImages] = useState<BackgroundImage[]>(
     []
@@ -41,10 +46,15 @@ function App() {
     setError('');
 
     try {
+      setLoadingStage('name');
       const convertedName = await convertToItalian(name);
       setItalianName(convertedName);
+
+      setLoadingStage('character');
       const concept = await generateCharacterConcept(convertedName);
       setCharacter(concept);
+
+      setLoadingStage('image');
       const imageUrl = await generateItalianBrainrotImage(
         convertedName,
         concept
@@ -59,7 +69,18 @@ function App() {
       }
     } finally {
       setLoading(false);
+      setLoadingStage(null);
     }
+  };
+
+  const handleReset = () => {
+    setName('');
+    setItalianName('');
+    setCharacter('');
+    setGeneratedImage('');
+    setError('');
+    setLoading(false);
+    setLoadingStage(null);
   };
 
   return (
@@ -88,7 +109,7 @@ function App() {
       >
         <div className='w-full'>
           <div className='bg-white/80 backdrop-blur-lg rounded-3xl shadow-lg p-6 mb-6 relative'>
-            <h1 className='text-xl md:text-3xl font-extrabold mb-4 font-comic bg-gradient-to-r from-[#FF0080] via-[#FF8C00] to-[#40E0D0] bg-clip-text text-transparent animate-bounce-slow text-center transform hover:scale-105 transition-transform duration-300 cursor-pointer select-none'>
+            <h1 className='text-xl md:text-3xl font-extrabold mb-4 bg-gradient-to-r from-[#FF0080] via-[#FF8C00] to-[#40E0D0] bg-clip-text text-transparent animate-bounce-slow text-center transform hover:scale-105 transition-transform duration-300 cursor-pointer select-none'>
               🎪 이탈리안 브레인롯 생성기 🎪
             </h1>
 
@@ -98,14 +119,14 @@ function App() {
                 value={name}
                 onChange={(e) => setName(e.target.value.trim())}
                 placeholder='✨ 당신의 이름을 입력해주세요. ✨'
-                className='w-full px-4 md:px-5 py-3 md:py-3.5 text-sm md:text-base border-3 border-dashed rounded-2xl bg-white/90 transition-all duration-300 ease-in-out font-comic animate-rainbow-border'
+                className='w-full px-4 md:px-5 py-3 md:py-3.5 text-sm md:text-base border-3 border-dashed rounded-2xl bg-white/90 transition-all duration-300 ease-in-out animate-rainbow-border'
                 required
               />
 
               <button
                 type='submit'
                 disabled={loading}
-                className='w-full bg-gradient-to-r from-[#ff6b6b] to-[#4ecdc4] text-white py-3.5 px-6 rounded-2xl font-bold text-base shadow-lg transition-all duration-300 ease-in-out hover:scale-105 hover:-translate-y-1 hover:shadow-xl disabled:opacity-70 disabled:cursor-not-allowed font-comic animate-wiggle'
+                className='w-full bg-gradient-to-r from-[#ff6b6b] to-[#4ecdc4] text-white py-3.5 px-6 rounded-2xl font-bold text-base shadow-lg transition-all duration-300 ease-in-out hover:scale-105 hover:-translate-y-1 hover:shadow-xl disabled:opacity-70 disabled:cursor-not-allowed animate-wiggle'
               >
                 {loading
                   ? '🌈 마법 시전 중... 🌈'
@@ -120,25 +141,58 @@ function App() {
             </div>
           )}
 
-          {italianName && (
-            <ResultCard
-              title='당신의 이탈리안 브레인롯 이름'
-              content={italianName}
-              emoji='✨'
-            />
+          {loading && (
+            <>
+              {loadingStage === 'name' && <LoadingCard type='name' />}
+              {loadingStage === 'character' && (
+                <>
+                  <ResultCard
+                    title='당신의 이탈리안 브레인롯 이름'
+                    content={italianName}
+                    emoji='✨'
+                  />
+                  <LoadingCard type='character' />
+                </>
+              )}
+              {loadingStage === 'image' && (
+                <>
+                  <ResultCard
+                    title='당신의 이탈리안 브레인롯 이름'
+                    content={italianName}
+                    emoji='✨'
+                  />
+                  <ResultCard
+                    title='캐릭터 설정'
+                    content={character}
+                    emoji='🎭'
+                  />
+                  <LoadingCard type='image' />
+                </>
+              )}
+            </>
           )}
 
-          {character && (
-            <ResultCard title='캐릭터 설정' content={character} emoji='🎭' />
-          )}
-
-          {generatedImage && (
-            <ResultCard
-              title='캐릭터 이미지'
-              content={generatedImage}
-              emoji='🎨'
-              isImage
-            />
+          {!loading && italianName && character && generatedImage && (
+            <>
+              <ResultCard
+                title='당신의 이탈리안 브레인롯 이름'
+                content={italianName}
+                emoji='✨'
+              />
+              <ResultCard title='캐릭터 설정' content={character} emoji='🎭' />
+              <ResultCard
+                title='캐릭터 이미지'
+                content={generatedImage}
+                emoji='🎨'
+                isImage
+              />
+              <ResultButtons
+                italianName={italianName}
+                character={character}
+                imageUrl={generatedImage}
+                onReset={handleReset}
+              />
+            </>
           )}
         </div>
       </div>
