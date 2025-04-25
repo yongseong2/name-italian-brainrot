@@ -71,7 +71,7 @@ function App() {
 
     try {
       setLoadingStage('name');
-      const convertedName = await convertToItalian(name);
+      const convertedName = await convertToItalian(name, additionalSetting);
       setItalianName(convertedName);
 
       setLoadingStage('character');
@@ -84,7 +84,8 @@ function App() {
       setLoadingStage('image');
       const imageUrl = await generateItalianBrainrotImage(
         convertedName,
-        concept
+        concept,
+        additionalSetting
       );
       setGeneratedImage(imageUrl);
 

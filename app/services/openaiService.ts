@@ -3,7 +3,10 @@ import { getNameGenerationPrompt } from '../prompts/nameGenerationPrompt';
 import { getCharacterConceptPrompt } from '../prompts/characterConceptPrompt';
 import { getImageGenerationPrompt } from '../prompts/imageGenerationPrompt';
 
-export const convertToItalian = async (name: string) => {
+export const convertToItalian = async (
+  name: string,
+  additionalSetting: string
+) => {
   try {
     const response = await axios.post(
       'https://api.openai.com/v1/chat/completions',
@@ -12,7 +15,7 @@ export const convertToItalian = async (name: string) => {
         messages: [
           {
             role: 'user',
-            content: getNameGenerationPrompt(name),
+            content: getNameGenerationPrompt(name, additionalSetting),
           },
         ],
       },
@@ -62,12 +65,14 @@ export const generateCharacterConcept = async (
 
 export const generateItalianBrainrotImage = async (
   characterName: string,
-  characterDescription: string
+  characterDescription: string,
+  additionalSetting: string
 ) => {
   try {
     const prompt = getImageGenerationPrompt(
       characterName,
-      characterDescription
+      characterDescription,
+      additionalSetting
     );
 
     const response = await axios.post(
